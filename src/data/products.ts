@@ -772,6 +772,11 @@ export function getProductBySlug(slug: string) {
   return products.find((product) => product.slug === slug);
 }
 
+export function getBrandsForCategory(category: Product["category"], count = 6) {
+  const brands = Array.from(new Set(products.filter((p) => p.category === category).map((p) => p.brand)));
+  return brands.sort().slice(0, count);
+}
+
 export function getRelatedProducts(product: Product, count = 4) {
   return products
     .filter((item) => item.id !== product.id && item.category === product.category)

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, SlidersHorizontal, X } from "lucide-react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { products } from "@/data/products";
 import { categories } from "@/data/categories";
@@ -21,29 +21,155 @@ const priceRanges = [
   { key: "priceOver", test: (price: number) => price >= 1000 },
 ];
 
+interface FilterFieldsProps {
+  selectedCategories: CategoryId[];
+  setSelectedCategories: (v: CategoryId[]) => void;
+  selectedRanges: string[];
+  setSelectedRanges: (v: string[]) => void;
+  selectedBrands: string[];
+  setSelectedBrands: (v: string[]) => void;
+  minRating: number;
+  setMinRating: (v: number) => void;
+  brands: string[];
+  clearFilters: () => void;
+}
+
+function FilterFields({
+  selectedCategories,
+  setSelectedCategories,
+  selectedRanges,
+  setSelectedRanges,
+  selectedBrands,
+  setSelectedBrands,
+  minRating,
+  setMinRating,
+  brands,
+  clearFilters,
+}: FilterFieldsProps) {
+  const { locale, t } = useLocale();
+
+  const toggle = <T,>(value: T, list: T[], setter: (v: T[]) => void) => {
+    setter(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
+  };
+
+  return (
+    <>
+      <div className="flex flex-col gap-6">
+        <div>
+          <h3 className="mb-3 text-label-bold font-label-bold text-on-surface">{t("filters.category")}</h3>
+          <div className="flex flex-col gap-2">
+            {categories.map((category) => (
+              <label key={category.id} className="group flex cursor-pointer items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={selectedCategories.includes(category.id)}
+                  onChange={() => toggle(category.id, selectedCategories, setSelectedCategories)}
+                  className="h-4 w-4 rounded-sm border-outline-variant text-primary focus:ring-primary"
+                />
+                <span className="text-body-md text-on-surface-variant transition-colors group-hover:text-primary">
+                  {localize(category.name, locale)}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-3 text-label-bold font-label-bold text-on-surface">{t("filters.price")}</h3>
+          <div className="flex flex-col gap-2">
+            {priceRanges.map((range) => (
+              <label key={range.key} className="group flex cursor-pointer items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={selectedRanges.includes(range.key)}
+                  onChange={() => toggle(range.key, selectedRanges, setSelectedRanges)}
+                  className="h-4 w-4 rounded-sm border-outline-variant text-primary focus:ring-primary"
+                />
+                <span className="text-body-md text-on-surface-variant transition-colors group-hover:text-primary">
+                  {t(`filters.${range.key}`)}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-3 text-label-bold font-label-bold text-on-surface">{t("filters.brand")}</h3>
+          <div className="flex max-h-48 flex-col gap-2 overflow-y-auto pe-1">
+            {brands.map((brand) => (
+              <label key={brand} className="group flex cursor-pointer items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={selectedBrands.includes(brand)}
+                  onChange={() => toggle(brand, selectedBrands, setSelectedBrands)}
+                  className="h-4 w-4 rounded-sm border-outline-variant text-primary focus:ring-primary"
+                />
+                <span className="text-body-md text-on-surface-variant transition-colors group-hover:text-primary">{brand}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-3 text-label-bold font-label-bold text-on-surface">{t("filters.rating")}</h3>
+          <div className="flex flex-col gap-2">
+            {[4, 3, 2].map((r) => (
+              <label key={r} className="group flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="rating"
+                  checked={minRating === r}
+                  onChange={() => setMinRating(r)}
+                  className="h-4 w-4 border-outline-variant text-primary focus:ring-primary"
+                />
+                <span className="text-body-md text-on-surface-variant transition-colors group-hover:text-primary">{r}+</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={clearFilters}
+        className="mt-8 rounded-full bg-surface-container-high py-2 text-label-bold font-label-bold text-on-surface-variant transition-colors hover:bg-outline-variant"
+      >
+        {t("filters.clearFilters")}
+      </button>
+    </>
+  );
+}
+
 export function ProductsView() {
   const { locale, t } = useLocale();
   const searchParams = useSearchParams();
 
   const initialCategory = searchParams.get("category") as CategoryId | null;
+  const initialBrand = searchParams.get("brand");
 
   const [selectedCategories, setSelectedCategories] = useState<CategoryId[]>(
     initialCategory ? [initialCategory] : []
   );
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(initialBrand ? [initialBrand] : []);
   const [selectedRanges, setSelectedRanges] = useState<string[]>([]);
   const [minRating, setMinRating] = useState<number>(0);
   const [sort, setSort] = useState<SortKey>("bestMatch");
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  // Re-syncs the category filter when navigating between category links while mounted;
+  // Re-syncs the category/brand filters when navigating between nav links while mounted;
   // initial render already matches via the lazy useState above.
   const searchParamsKey = searchParams.toString();
   useEffect(() => {
     const category = searchParams.get("category") as CategoryId | null;
+    const brand = searchParams.get("brand");
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedCategories(category ? [category] : []);
+    setSelectedBrands(brand ? [brand] : []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParamsKey]);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileFiltersOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileFiltersOpen]);
 
   const brands = useMemo(() => Array.from(new Set(products.map((p) => p.brand))).sort(), []);
 
@@ -75,10 +201,6 @@ export function ProductsView() {
     return list;
   }, [selectedCategories, selectedBrands, selectedRanges, minRating, sort]);
 
-  const toggle = <T,>(value: T, list: T[], setter: (v: T[]) => void) => {
-    setter(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
-  };
-
   const clearFilters = () => {
     setSelectedCategories([]);
     setSelectedBrands([]);
@@ -91,96 +213,35 @@ export function ProductsView() {
       ? localize(categories.find((c) => c.id === selectedCategories[0])!.name, locale)
       : t("nav.allProducts");
 
+  const activeFilterCount =
+    selectedCategories.length + selectedBrands.length + selectedRanges.length + (minRating ? 1 : 0);
+
+  const filterFieldsProps: FilterFieldsProps = {
+    selectedCategories,
+    setSelectedCategories,
+    selectedRanges,
+    setSelectedRanges,
+    selectedBrands,
+    setSelectedBrands,
+    minRating,
+    setMinRating,
+    brands,
+    clearFilters,
+  };
+
   return (
-    <div className="mx-auto flex w-full max-w-container-max items-start gap-gutter px-margin-mobile py-stack-lg md:px-margin-desktop">
-      {/* Sidebar filters */}
-      <aside className="sticky top-40 hidden w-72 shrink-0 flex-col rounded-sm border-e border-outline-variant bg-surface-container-lowest p-4 md:flex">
+    <div className="mx-auto flex w-full max-w-full lg:max-w-container-max items-start gap-gutter px-margin-mobile py-stack-lg md:px-margin-desktop">
+      {/* Sidebar filters (desktop) */}
+      <aside className="sticky top-40 hidden w-72 shrink-0 flex-col rounded-sm border-e border-outline-variant bg-surface-container-lowest p-4 lg:flex">
         <div className="mb-stack-md border-b border-surface-variant pb-4">
           <h2 className="text-headline-md font-headline-md text-primary">{t("filters.title")}</h2>
           <p className="text-body-sm text-on-surface-variant">{t("filters.narrow")}</p>
         </div>
-        <div className="flex flex-col gap-6">
-          <div>
-            <h3 className="mb-3 text-label-bold font-label-bold text-on-surface">{t("filters.category")}</h3>
-            <div className="flex flex-col gap-2">
-              {categories.map((category) => (
-                <label key={category.id} className="group flex cursor-pointer items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedCategories.includes(category.id)}
-                    onChange={() => toggle(category.id, selectedCategories, setSelectedCategories)}
-                    className="h-4 w-4 rounded-sm border-outline-variant text-primary focus:ring-primary"
-                  />
-                  <span className="text-body-md text-on-surface-variant transition-colors group-hover:text-primary">
-                    {localize(category.name, locale)}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3 className="mb-3 text-label-bold font-label-bold text-on-surface">{t("filters.price")}</h3>
-            <div className="flex flex-col gap-2">
-              {priceRanges.map((range) => (
-                <label key={range.key} className="group flex cursor-pointer items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedRanges.includes(range.key)}
-                    onChange={() => toggle(range.key, selectedRanges, setSelectedRanges)}
-                    className="h-4 w-4 rounded-sm border-outline-variant text-primary focus:ring-primary"
-                  />
-                  <span className="text-body-md text-on-surface-variant transition-colors group-hover:text-primary">
-                    {t(`filters.${range.key}`)}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3 className="mb-3 text-label-bold font-label-bold text-on-surface">{t("filters.brand")}</h3>
-            <div className="flex max-h-48 flex-col gap-2 overflow-y-auto pe-1">
-              {brands.map((brand) => (
-                <label key={brand} className="group flex cursor-pointer items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedBrands.includes(brand)}
-                    onChange={() => toggle(brand, selectedBrands, setSelectedBrands)}
-                    className="h-4 w-4 rounded-sm border-outline-variant text-primary focus:ring-primary"
-                  />
-                  <span className="text-body-md text-on-surface-variant transition-colors group-hover:text-primary">{brand}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3 className="mb-3 text-label-bold font-label-bold text-on-surface">{t("filters.rating")}</h3>
-            <div className="flex flex-col gap-2">
-              {[4, 3, 2].map((r) => (
-                <label key={r} className="group flex cursor-pointer items-center gap-2">
-                  <input
-                    type="radio"
-                    name="rating"
-                    checked={minRating === r}
-                    onChange={() => setMinRating(r)}
-                    className="h-4 w-4 border-outline-variant text-primary focus:ring-primary"
-                  />
-                  <span className="text-body-md text-on-surface-variant transition-colors group-hover:text-primary">{r}+</span>
-                </label>
-              ))}
-            </div>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={clearFilters}
-          className="mt-8 rounded-full bg-surface-container-high py-2 text-label-bold font-label-bold text-on-surface-variant transition-colors hover:bg-outline-variant"
-        >
-          {t("filters.clearFilters")}
-        </button>
+        <FilterFields {...filterFieldsProps} />
       </aside>
 
       {/* Main content */}
-      <div className="flex-1">
+      <div className="min-w-0 flex-1">
         <nav className="mb-6 flex items-center gap-2 text-body-sm text-on-surface-variant">
           <Link href="/" className="transition-colors hover:text-primary">
             {t("product.breadcrumbHome")}
@@ -196,21 +257,36 @@ export function ProductsView() {
             </h1>
             <p className="text-body-md text-on-surface-variant">{t("filters.showingResults", { count: filtered.length })}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <label htmlFor="sort" className="text-body-sm text-on-surface-variant">
-              {t("filters.sortBy")}
-            </label>
-            <select
-              id="sort"
-              value={sort}
-              onChange={(event) => setSort(event.target.value as SortKey)}
-              className="cursor-pointer rounded-full border border-outline-variant bg-surface-container-lowest py-2 pe-8 ps-4 text-body-sm text-on-surface focus:border-primary focus:ring-primary"
+          <div className="flex w-full items-center justify-between gap-2 sm:w-auto">
+            <button
+              type="button"
+              onClick={() => setMobileFiltersOpen(true)}
+              className="flex items-center gap-2 rounded-full border border-outline-variant bg-surface-container-lowest px-4 py-2 text-body-sm text-on-surface lg:hidden"
             >
-              <option value="bestMatch">{t("filters.bestMatch")}</option>
-              <option value="priceLowHigh">{t("filters.priceLowHigh")}</option>
-              <option value="priceHighLow">{t("filters.priceHighLow")}</option>
-              <option value="topRated">{t("filters.topRated")}</option>
-            </select>
+              <SlidersHorizontal className="h-4 w-4" />
+              {t("filters.title")}
+              {activeFilterCount > 0 && (
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-on-primary">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
+            <div className="flex items-center gap-2">
+              <label htmlFor="sort" className="hidden text-body-sm text-on-surface-variant sm:inline">
+                {t("filters.sortBy")}
+              </label>
+              <select
+                id="sort"
+                value={sort}
+                onChange={(event) => setSort(event.target.value as SortKey)}
+                className="cursor-pointer rounded-full border border-outline-variant bg-surface-container-lowest py-2 pe-8 ps-4 text-body-sm text-on-surface focus:border-primary focus:ring-primary"
+              >
+                <option value="bestMatch">{t("filters.bestMatch")}</option>
+                <option value="priceLowHigh">{t("filters.priceLowHigh")}</option>
+                <option value="priceHighLow">{t("filters.priceHighLow")}</option>
+                <option value="topRated">{t("filters.topRated")}</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -219,13 +295,51 @@ export function ProductsView() {
             {t("filters.noResults")}
           </p>
         ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
             {filtered.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}
       </div>
+
+      {/* Mobile filter drawer */}
+      {mobileFiltersOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col lg:hidden">
+          <button
+            type="button"
+            aria-label={t("common.close")}
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setMobileFiltersOpen(false)}
+          />
+          <div className="relative mt-auto flex max-h-[85vh] flex-col rounded-t-md bg-surface-container-lowest p-4 shadow-elevated animate-fade-in">
+            <div className="mb-stack-md flex items-center justify-between border-b border-surface-variant pb-4">
+              <div>
+                <h2 className="text-headline-md font-headline-md text-primary">{t("filters.title")}</h2>
+                <p className="text-body-sm text-on-surface-variant">{t("filters.narrow")}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(false)}
+                aria-label={t("common.close")}
+                className="rounded-full p-2 text-on-surface-variant hover:bg-surface-container"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="overflow-y-auto">
+              <FilterFields {...filterFieldsProps} />
+            </div>
+            <button
+              type="button"
+              onClick={() => setMobileFiltersOpen(false)}
+              className="mt-4 rounded-full bg-primary py-3 text-label-bold font-label-bold text-on-primary"
+            >
+              {t("filters.showResults", { count: filtered.length })}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

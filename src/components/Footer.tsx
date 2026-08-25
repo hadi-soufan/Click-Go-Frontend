@@ -16,7 +16,7 @@ export function Footer() {
 
   return (
     <footer className="mt-margin-desktop w-full border-t border-surface-variant bg-surface-container-lowest px-margin-mobile py-12 md:px-margin-desktop">
-      <div className="mx-auto flex w-full max-w-container-max flex-col items-start justify-between gap-8 md:flex-row">
+      <div className="mx-auto flex w-full max-w-full lg:max-w-container-max flex-col items-start justify-between gap-8 md:flex-row">
         <div className="max-w-sm">
           <div className="mb-4 text-headline-md font-headline-md text-primary">{t("brand")}</div>
           <p className="mb-6 text-body-sm text-on-surface-variant">{t("footer.about")}</p>
@@ -46,7 +46,7 @@ export function Footer() {
           ))}
         </div>
       </div>
-      <div className="mx-auto mt-stack-lg w-full max-w-container-max border-t border-surface-variant pt-stack-md">
+      <div className="mx-auto mt-stack-lg w-full max-w-full lg:max-w-container-max border-t border-surface-variant pt-stack-md">
         <p className="text-body-sm text-on-surface-variant">{t("footer.copyright", { year })}</p>
       </div>
     </footer>

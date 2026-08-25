@@ -14,7 +14,13 @@
     "deals": "Deals",
     "allProducts": "All Products",
     "departments": "Departments",
-    "services": "Services"
+    "services": "Services",
+    "allServices": "All Services",
+    "whishMoney": "Whish Money",
+    "repair": "Repair",
+    "delivery": "Delivery",
+    "onlineShop": "Online Shop",
+    "shopAll": "Shop all"
   },
   "header": {
     "searchPlaceholder": "Search everything at Click&Go...",
@@ -146,6 +152,7 @@
     "topRated": "Top rated",
     "showingResults": "Showing {count} results",
     "noResults": "No products match your filters",
+    "showResults": "Show {count} results",
     "search": "Search"
   },
   "footer": {

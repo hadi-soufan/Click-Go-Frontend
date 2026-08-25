@@ -14,7 +14,13 @@
     "deals": "العروض",
     "allProducts": "كل المنتجات",
     "departments": "الأقسام",
-    "services": "الخدمات"
+    "services": "الخدمات",
+    "allServices": "كل الخدمات",
+    "whishMoney": "Whish Money",
+    "repair": "الصيانة والإصلاح",
+    "delivery": "التوصيل",
+    "onlineShop": "المتجر الإلكتروني",
+    "shopAll": "تسوق الكل"
   },
   "header": {
     "searchPlaceholder": "ابحث في كل ما يقدمه Click&Go...",
@@ -146,6 +152,7 @@
     "topRated": "الأعلى تقييمًا",
     "showingResults": "عرض {count} نتيجة",
     "noResults": "لا توجد منتجات تطابق التصفية المحددة",
+    "showResults": "عرض {count} نتيجة",
     "search": "بحث"
   },
   "footer": {

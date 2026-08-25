@@ -26,7 +26,7 @@ export function CartView() {
   const recommended = products.filter((product) => !cartProductIds.has(product.id)).slice(0, 4);
 
   return (
-    <div className="mx-auto w-full max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <div className="mx-auto w-full max-w-full lg:max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
       <h1 className="mb-stack-lg text-headline-xl-mobile font-headline-xl-mobile text-on-background md:text-headline-xl md:font-headline-xl">
         {t("cart.title")}
       </h1>

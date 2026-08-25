@@ -12,7 +12,7 @@ export default function HomePage() {
   const bestSellers = products.filter((p) => p.badge === "bestSeller" || p.rating >= 4.6).slice(0, 8);
 
   return (
-    <div className="mx-auto flex w-full max-w-container-max flex-col gap-margin-desktop px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <div className="mx-auto flex w-full max-w-full lg:max-w-container-max flex-col gap-margin-desktop px-margin-mobile py-stack-lg md:px-margin-desktop">
       <Hero />
       <PromoGrid />
       <CategoryGrid />

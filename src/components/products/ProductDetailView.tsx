@@ -35,7 +35,7 @@ export function ProductDetailView({ product, related }: { product: Product; rela
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-container-max flex-col gap-margin-desktop px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <div className="mx-auto flex w-full max-w-full lg:max-w-container-max flex-col gap-margin-desktop px-margin-mobile py-stack-lg md:px-margin-desktop">
     <div className="flex w-full flex-col gap-gutter md:flex-row">
       {/* Gallery */}
       <section className="flex max-w-3xl flex-1 flex-col gap-stack-md">
