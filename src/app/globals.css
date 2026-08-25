@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-surface: #f6f9ff;
+  --color-surface-dim: #d6dae0;
+  --color-surface-bright: #f6f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f0f4fa;
+  --color-surface-container: #eaeef4;
+  --color-surface-container-high: #e4e8ef;
+  --color-surface-container-highest: #dfe3e9;
+  --color-on-surface: #171c21;
+  --color-on-surface-variant: #414752;
+  --color-inverse-surface: #2c3136;
+  --color-inverse-on-surface: #edf1f7;
+  --color-outline: #717784;
+  --color-outline-variant: #c1c7d4;
+  --color-surface-tint: #005faf;
+  --color-primary: #0058a3;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #0071ce;
+  --color-on-primary-container: #f3f5ff;
+  --color-inverse-primary: #a5c8ff;
+  --color-secondary: #795900;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #fcc01d;
+  --color-on-secondary-container: #6c5000;
+  --color-tertiary: #904100;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #b65400;
+  --color-on-tertiary-container: #fff3ef;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-primary-fixed: #d4e3ff;
+  --color-primary-fixed-dim: #a5c8ff;
+  --color-on-primary-fixed: #001c3a;
+  --color-on-primary-fixed-variant: #004785;
+  --color-secondary-fixed: #ffdf9f;
+  --color-secondary-fixed-dim: #f9bd19;
+  --color-on-secondary-fixed: #261a00;
+  --color-on-secondary-fixed-variant: #5b4300;
+  --color-tertiary-fixed: #ffdbc9;
+  --color-tertiary-fixed-dim: #ffb68c;
+  --color-on-tertiary-fixed: #321200;
+  --color-on-tertiary-fixed-variant: #753400;
+  --color-background: #f6f9ff;
+  --color-on-background: #171c21;
+  --color-surface-variant: #dfe3e9;
+  --color-deep-navy: #002d58;
+  --color-soft-blue-bg: #f2f8fd;
+  --color-surface-gray: #f2f2f2;
+}
+
+:root.dark {
+  --color-surface: #0b141f;
+  --color-surface-dim: #0b141f;
+  --color-surface-bright: #2c3745;
+  --color-surface-container-lowest: #060d15;
+  --color-surface-container-low: #131d29;
+  --color-surface-container: #182233;
+  --color-surface-container-high: #22303f;
+  --color-surface-container-highest: #2d3c4d;
+  --color-on-surface: #e5eaf2;
+  --color-on-surface-variant: #b8c0cc;
+  --color-inverse-surface: #e5eaf2;
+  --color-inverse-on-surface: #2c3136;
+  --color-outline: #8b93a1;
+  --color-outline-variant: #3a4657;
+  --color-surface-tint: #a5c8ff;
+  --color-primary: #a5c8ff;
+  --color-on-primary: #001c3a;
+  --color-primary-container: #004785;
+  --color-on-primary-container: #d4e3ff;
+  --color-inverse-primary: #0058a3;
+  --color-secondary: #f9bd19;
+  --color-on-secondary: #261a00;
+  --color-secondary-container: #5b4300;
+  --color-on-secondary-container: #ffdf9f;
+  --color-tertiary: #ffb68c;
+  --color-on-tertiary: #321200;
+  --color-tertiary-container: #753400;
+  --color-on-tertiary-container: #ffdbc9;
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+  --color-primary-fixed: #d4e3ff;
+  --color-primary-fixed-dim: #a5c8ff;
+  --color-on-primary-fixed: #001c3a;
+  --color-on-primary-fixed-variant: #004785;
+  --color-secondary-fixed: #ffdf9f;
+  --color-secondary-fixed-dim: #f9bd19;
+  --color-on-secondary-fixed: #261a00;
+  --color-on-secondary-fixed-variant: #5b4300;
+  --color-tertiary-fixed: #ffdbc9;
+  --color-tertiary-fixed-dim: #ffb68c;
+  --color-on-tertiary-fixed: #321200;
+  --color-on-tertiary-fixed-variant: #753400;
+  --color-background: #0b141f;
+  --color-on-background: #e5eaf2;
+  --color-surface-variant: #2d3c4d;
+  --color-deep-navy: #001731;
+  --color-soft-blue-bg: #0f1c2e;
+  --color-surface-gray: #1b2432;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-outline-variant) transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
