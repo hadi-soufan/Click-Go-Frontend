@@ -31,7 +31,7 @@ export function Newsletter() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder={t("home.newsletterPlaceholder")}
-              className="h-12 w-full flex-1 rounded-full border-none bg-surface-container-lowest px-4 text-body-md text-on-surface outline-none focus:ring-2 focus:ring-secondary-container"
+              className="h-12 w-full shrink-0 rounded-full border-none bg-surface-container-lowest px-4 text-body-md text-on-surface outline-none focus:ring-2 focus:ring-secondary-container sm:flex-1"
             />
             <button
               type="submit"
