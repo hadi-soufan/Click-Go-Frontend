@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, CreditCard, Store, Car, Shield, BookmarkPlus, Check, ZoomIn } from "lucide-react";
+import { ChevronRight, Store, Car, BookmarkPlus, Check, ZoomIn } from "lucide-react";
 import type { Product } from "@/types/product";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { formatPrice, localize } from "@/lib/utils";
@@ -26,8 +26,6 @@ export function ProductDetailView({ product, related }: { product: Product; rela
   );
   const [added, setAdded] = useState(false);
 
-  const monthly = Math.max(1, Math.round(product.price / 24));
-
   const handleAdd = () => {
     addItem(product, 1);
     setAdded(true);
@@ -35,7 +33,7 @@ export function ProductDetailView({ product, related }: { product: Product; rela
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-full lg:max-w-container-max flex-col gap-margin-desktop px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <div className="mx-auto flex w-full max-w-full lg:max-w-container-max flex-col gap-stack-lg px-margin-mobile py-stack-lg md:gap-margin-desktop md:px-margin-desktop">
     <div className="flex w-full flex-col gap-gutter md:flex-row">
       {/* Gallery */}
       <section className="flex max-w-3xl flex-1 flex-col gap-stack-md">
@@ -105,25 +103,11 @@ export function ProductDetailView({ product, related }: { product: Product; rela
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 rounded-sm border border-surface-variant bg-surface-container-lowest p-stack-md">
-          <div className="flex items-baseline gap-2">
-            <span className="text-price-display font-price-display text-on-surface">{formatPrice(product.price)}</span>
-            {product.originalPrice && (
-              <span className="text-body-md text-on-surface-variant line-through">{formatPrice(product.originalPrice)}</span>
-            )}
-          </div>
-          <div className="flex items-start gap-3 rounded-md bg-soft-blue-bg p-3">
-            <CreditCard className="mt-0.5 h-5 w-5 text-primary" />
-            <div>
-              <p className="text-body-md font-semibold text-on-surface">
-                {t("productDetail.financingPrefix")} ${monthly}
-                {t("productDetail.financingSuffix")}
-              </p>
-              <p className="text-body-sm text-on-surface-variant">
-                {t("productDetail.financingTerms")} <span className="cursor-pointer text-primary hover:underline">{t("productDetail.learnHow")}</span>
-              </p>
-            </div>
-          </div>
+        <div className="flex items-baseline gap-2">
+          <span className="text-price-display font-price-display text-on-surface">{formatPrice(product.price)}</span>
+          {product.originalPrice && (
+            <span className="text-body-md text-on-surface-variant line-through">{formatPrice(product.originalPrice)}</span>
+          )}
         </div>
 
         <div className="flex flex-col gap-stack-md">
@@ -163,17 +147,6 @@ export function ProductDetailView({ product, related }: { product: Product; rela
           >
             <BookmarkPlus className="h-4 w-4" />
             {t("productDetail.addToList")}
-          </button>
-        </div>
-
-        <div className="flex items-start gap-4 rounded-sm border border-surface-variant bg-surface-container-lowest p-4">
-          <Shield className="h-8 w-8 shrink-0 text-secondary-fixed-dim" />
-          <div className="flex-1">
-            <h4 className="text-label-bold font-label-bold text-on-surface">{t("productDetail.protectionPlan")}</h4>
-            <p className="mt-1 text-body-sm text-on-surface-variant">{t("productDetail.protectionPlanDesc")}</p>
-          </div>
-          <button type="button" className="shrink-0 text-label-bold font-label-bold text-primary hover:underline">
-            {t("productDetail.protectionAdd")}
           </button>
         </div>
 

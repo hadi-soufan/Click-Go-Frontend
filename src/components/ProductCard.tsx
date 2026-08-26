@@ -65,8 +65,10 @@ export function ProductCard({ product }: { product: Product }) {
           <span className="text-body-sm text-on-surface-variant">({product.reviewCount.toLocaleString(locale === "ar" ? "ar-EG" : "en-US")})</span>
         </div>
         <div className="mt-auto">
-          <div className="mb-2 flex items-end gap-2">
-            <span className="text-price-display font-price-display text-primary">{formatPrice(product.price)}</span>
+          <div className="mb-2 flex flex-wrap items-end gap-x-2 gap-y-0">
+            <span className="text-[20px] font-price-display leading-[24px] text-primary sm:text-price-display sm:leading-[32px]">
+              {formatPrice(product.price)}
+            </span>
             {product.originalPrice && (
               <span className="mb-1 text-body-sm text-on-surface-variant line-through">{formatPrice(product.originalPrice)}</span>
             )}

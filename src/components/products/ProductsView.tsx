@@ -128,7 +128,7 @@ function FilterFields({
       <button
         type="button"
         onClick={clearFilters}
-        className="mt-8 rounded-full bg-surface-container-high py-2 text-label-bold font-label-bold text-on-surface-variant transition-colors hover:bg-outline-variant"
+        className="mt-8 self-start rounded-full bg-surface-container-high px-6 py-2 text-label-bold font-label-bold text-on-surface-variant transition-colors hover:bg-outline-variant"
       >
         {t("filters.clearFilters")}
       </button>

@@ -9,10 +9,6 @@ export function Hero() {
 
   return (
     <section className="flex flex-col items-center gap-6 rounded-sm bg-gradient-to-r from-primary-container to-primary px-6 py-8 text-on-primary md:min-h-52 md:flex-row md:justify-between md:gap-8 md:px-10">
-      <span className="inline-block shrink-0 self-center rounded-sm bg-surface-container-lowest px-5 py-3 text-label-bold font-label-bold text-primary shadow-sm">
-        {t("home.heroEyebrow")}
-      </span>
-
       <div className="flex flex-1 flex-col items-center gap-2 text-center">
         <h1 className="text-headline-xl-mobile font-headline-xl-mobile md:text-headline-lg md:font-headline-lg">{t("home.heroTitle")}</h1>
         <p className="max-w-md text-body-sm text-primary-fixed md:text-body-md">{t("home.heroSubtitle")}</p>
